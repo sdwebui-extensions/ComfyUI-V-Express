@@ -18,7 +18,7 @@ import folder_paths
 import folder_paths as comfy_paths
 from comfy import model_management
 
-ROOT_PATH = os.path.join(comfy_paths.get_folder_paths("custom_nodes")[0], "ComfyUI-V-Express")
+ROOT_PATH = "/code/ComfyUI/custom_nodes/ComfyUI-V-Express"
 sys.path.append(os.path.join(ROOT_PATH, 'src'))
 
 from .src.pipelines import VExpressPipeline
@@ -52,6 +52,8 @@ NUM_PAD_AUDIO_FRAMES = 2
 def get_all_model_path(vexpress_model_path):
     if not os.path.isabs(vexpress_model_path):
         vexpress_model_path = os.path.join(ROOT_PATH, vexpress_model_path)
+    if not os.path.exists(os.path.join(vexpress_model_path, 'stable-diffusion-v1-5/unet/config.json')) and os.path.exists('/stable-diffusion-cache/models'):
+        vexpress_model_path = '/stable-diffusion-cache/models/V-Express/model_ckpts'
 
     unet_config_path = os.path.join(vexpress_model_path, 'stable-diffusion-v1-5/unet/config.json')
     vae_path = os.path.join(vexpress_model_path, 'sd-vae-ft-mse')
