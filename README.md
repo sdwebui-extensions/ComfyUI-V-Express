@@ -35,6 +35,8 @@ Our method gradually enables effective control by weak conditions, thereby achie
    pip install -r requirements.txt
    ```
 
+   If you are using ComfyUI_windows_portable , you should use `.\python_embeded\python.exe -m pip` to replace `pip` for installation.
+
    If you got error regards insightface, you may find solution [here](https://www.youtube.com/watch?v=vCCVxGtCyho).
 
    - first, you should download .whl file [here](https://github.com/Gourieff/Assets/tree/main/Insightface)
@@ -43,7 +45,7 @@ Our method gradually enables effective control by weak conditions, thereby achie
 2. Download V-Express models and other needed models:
 
    - [model_ckpts](https://huggingface.co/tk93/V-Express)
-   - You need to replace the **model_ckpts** folder with the downloaded **V-Express/model_ckpts**. The final **model_ckpts** folder is as follows:
+   - You need to replace the **model_ckpts** folder with the downloaded **V-Express/model_ckpts**. Then you should download and put all `.bin` model to `model_ckpts/v-express` directory, which includes `audio_projection.bin`, `denoising_unet.bin`, `motion_module.bin`, `reference_net.bin`, and `v_kps_guider.bin`. The final **model_ckpts** folder is as follows:
 
    ```text
    ./model_ckpts/
@@ -54,7 +56,8 @@ Our method gradually enables effective control by weak conditions, thereby achie
    |-- wav2vec2-base-960h
    ```
 
-3. You should put the files in input directory into the Your ComfyUI Input root directory\ComfyUI\input\.
+3. You should put the files in input directory into the Your ComfyUI Input root `directory\ComfyUI\input\`.
+4. You need to set `output_path` as `directory\ComfyUI\output\xxx.mp4`, otherwise the output video will not be displayed in the ComfyUI.
 
 ## Acknowledgements
 
