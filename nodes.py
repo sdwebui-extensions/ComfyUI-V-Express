@@ -6,33 +6,14 @@ import time
 import torch
 import torchaudio.functional
 import torchvision.io
-from imageio_ffmpeg import get_ffmpeg_exe
 from PIL import Image
 
-from diffusers.utils.torch_utils import randn_tensor
-from diffusers import AutoencoderKL
-from insightface.app import FaceAnalysis
-from transformers import Wav2Vec2Model, Wav2Vec2Processor
-import accelerate
-
 import folder_paths
-import folder_paths as comfy_paths
 from comfy import model_management
 
 ROOT_PATH = "/code/ComfyUI/custom_nodes/ComfyUI-V-Express"
-sys.path.append(os.path.join(ROOT_PATH, 'src'))
+sys.path.append(os.path.join(ROOT_PATH, 'V_Express'))
 
-from .src.pipelines import VExpressPipeline
-from .src.pipelines.utils import draw_kps_image, save_video
-from .src.pipelines.utils import retarget_kps
-from .src.util import get_ffmpeg
-from .src.inference import (
-    get_scheduler,
-    load_reference_net,
-    load_denoising_unet,
-    load_v_kps_guider,
-    load_audio_projection,
-)
 
 INPUT_PATH = folder_paths.get_input_directory()
 OUTPUT_PATH = folder_paths.get_output_directory()
@@ -202,6 +183,9 @@ class V_Express_Sampler:
         save_gpu_memory=True,
         do_multi_devices_inference=False,
     ):
+        from .V_Express.pipelines.utils import draw_kps_image, save_video
+        from .V_Express.pipelines.utils import retarget_kps
+        from insightface.app import FaceAnalysis
         start_time = time.time()
 
         accelerator = None
@@ -325,6 +309,10 @@ class V_Express_Loader:
     CATEGORY = "V-Express"
     FUNCTION = "load_vexpress_pipeline"
     def load_vexpress_pipeline(self, vexpress_model_path):
+        from .V_Express.pipelines import VExpressPipeline
+        from .V_Express.inference import get_scheduler, load_reference_net, load_denoising_unet, load_v_kps_guider, load_audio_projection
+        from diffusers import AutoencoderKL
+        from transformers import Wav2Vec2Model, Wav2Vec2Processor
 
         model_dict = get_all_model_path(vexpress_model_path)
 
@@ -418,6 +406,7 @@ class Load_Audio_Path_From_Video:
 
     FUNCTION = "load_audio_path_from_video"
     def load_audio_path_from_video(self, video_path):
+        from imageio_ffmpeg import get_ffmpeg_exe
         video_path = os.path.join(INPUT_PATH, video_path)
         video_base_name = video_path[:video_path.rfind('.')]
         audio_name = f'{video_base_name}_audio.mp3'
@@ -470,6 +459,7 @@ class Load_Kps_Path_From_Video:
 
     FUNCTION = "load_kps_path_from_video"
     def load_kps_path_from_video(self, vexpress_model_path, video_path, image_size):
+        from insightface.app import FaceAnalysis
         video_path = os.path.join(INPUT_PATH, video_path)
         video_base_name = video_path[:video_path.rfind('.')]
         kps_name = f'{video_base_name}_kps.pth'
